@@ -52,7 +52,7 @@ If the credentials are valid, the system authenticates the user and redirects th
 
 Example screen:
 
-![Login Page](screenshots/login.png)
+![Login Page](screenshots/login.jpeg)
 
 ---
 
@@ -73,7 +73,8 @@ The dashboard displays the modules that the user is allowed to access based on t
 
 Example screen:
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/AdminDashboard.jpeg)
+![Dashboard](screenshots/StudentDashboard.jpeg)
 
 ---
 
@@ -89,11 +90,17 @@ This module allows **Admin and Warden** to manage student records.
 - View student list
 - Checkout student
 
+### Student Capabilities
+
+- View student profile
+
 This module helps maintain accurate student records and hostel occupancy information.
 
 Example screen:
 
-![Students](screenshots/students.png)
+![Students](screenshots/Students.jpeg)
+![Students](screenshots/Profile.jpeg)
+
 
 ---
 
@@ -115,11 +122,16 @@ This module manages hostel rooms and room allocations.
 - Allocate room to students
 - Deallocate rooms
 
+### Student Capabilities
+
+- View student room
+
 The system automatically updates room occupancy and status based on allocations.
 
 Example screen:
 
-![Rooms](screenshots/rooms.png)
+![Rooms](screenshots/Room.jpeg)
+![Rooms](screenshots/MyRoom.jpeg)
 
 ---
 
@@ -145,6 +157,7 @@ Example screen:
 
 ![Fees](screenshots/Fees.jpeg)
 
+
 ---
 
 # 8. Payment System
@@ -161,7 +174,7 @@ This ensures transparent financial tracking within the hostel system.
 
 Example screen:
 
-![Payments](screenshots/payments.png)
+![Payments](screenshots/MyFees.jpeg)
 
 ---
 
@@ -189,7 +202,8 @@ Complaint status may change through the following stages:
 
 Example screen:
 
-![Complaints](screenshots/complaints.png)
+![Complaints](screenshots/Complaints.jpeg)
+![Complaints](screenshots/MyComplaints.jpeg)
 
 ---
 
@@ -211,7 +225,7 @@ The mess management module handles food services in the hostel.
 
 Example screen:
 
-![Mess](screenshots/mess.png)
+![Mess](screenshots/Mess.jpeg)
 
 ---
 
