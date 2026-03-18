@@ -10,7 +10,7 @@ function Complaints() {
 const [complaints, setComplaints] = useState([]);
 
 const [formData, setFormData] = useState({
-ticketNo:"",
+
 category: "",
 subject: "",
 description: "",
@@ -91,14 +91,7 @@ return(
 
 <form onSubmit={handleSubmit}>
 
-<input
-  className="input-field"
-  type="text"
-  name="ticketNo"
-  placeholder="Ticket Number"
-  value={formData.ticketNo}
-  onChange={handleChange}
-/>
+
 
 <input
 className="input-field"

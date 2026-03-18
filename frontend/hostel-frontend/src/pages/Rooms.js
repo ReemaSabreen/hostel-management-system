@@ -34,7 +34,7 @@ rentPerMonth:""
 
 const [allocation,setAllocation] = useState({
 studentId:"",
-roomId:""
+roomNumber:""
 });
 
 useEffect(()=>{
@@ -130,7 +130,7 @@ const handleAllocate = async ()=>{
 
 try{
 
-await allocateRoom(allocation.studentId,allocation.roomId);
+await allocateRoom(allocation.studentId,allocation.roomNumber);
 
 alert("Room Allocated");
 
@@ -150,6 +150,7 @@ alert("Room Deallocated");
 
 loadAllocations();
 loadRooms();
+loadAllAllocations();
 
 }catch(e){}
 
@@ -221,10 +222,19 @@ placeholder="Student ID"
 onChange={(e)=>setAllocation({...allocation,studentId:e.target.value})}
 />
 
-<input className="input-field"
-placeholder="Room ID"
-onChange={(e)=>setAllocation({...allocation,roomId:e.target.value})}
-/>
+<select
+className="input-field"
+onChange={(e)=>setAllocation({...allocation,roomNumber:e.target.value})}
+>
+<option value="">Select Room</option>
+
+{availableRooms.map(room=>(
+  <option key={room.roomId} value={room.roomNumber}>
+    {room.roomNumber} (Floor {room.floor})
+  </option>
+))}
+
+</select>
 
 <button className="primary-btn" onClick={handleAllocate}>
 Allocate
@@ -270,6 +280,7 @@ Load All Allocations
 <th>Room</th>
 <th>Status</th>
 <th>Allocated On</th>
+<th>Deallocated On</th>
 </tr>
 </thead>
 
@@ -285,6 +296,7 @@ Load All Allocations
 <td>{a.room.roomNumber}</td>
 <td>{a.status}</td>
 <td>{a.allocationDate}</td>
+<td>{a.deallocationDate || "-"}</td>
 
 </tr>
 
@@ -334,10 +346,11 @@ Load Allocations
 
 <td>
 
-<button className="action-btn delete-btn"
+<button className="action-btn warning-btn"
+disabled={a.status === "COMPLETED"}
 onClick={()=>handleDeallocate(a.allocationId)}
 >
-Deallocate
+{a.status === "COMPLETED"? "Deallocated":"Deallocate"}
 </button>
 
 </td>

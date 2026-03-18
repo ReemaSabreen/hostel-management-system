@@ -10,8 +10,10 @@ import com.hostel.hostel_management.entity.Payment;
 import com.hostel.hostel_management.entity.enums.FeeStatus;
 import com.hostel.hostel_management.repository.FeeRepository;
 import com.hostel.hostel_management.repository.PaymentRepository;
+import com.hostel.hostel_management.service.NotificationService;
 import com.hostel.hostel_management.service.PaymentService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,8 +22,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final FeeRepository feeRepository;
+    private final NotificationService notificationService;
 
     @Override
+    @Transactional
     public Payment makePayment(Long feeId, Payment payment){
 
         Fee fee = feeRepository.findById(feeId)
@@ -41,7 +45,11 @@ public class PaymentServiceImpl implements PaymentService {
         fee.setStatus(FeeStatus.PAID);
         feeRepository.save(fee);
 
-        return paymentRepository.save(payment);
+        Payment savedPayment =  paymentRepository.save(payment);
+       
+        notificationService.createNotification(fee.getStudent(),"Fee paid : "+payment.getAmount()+" paid for Fee id : "+fee.getFeeId()+" type "+fee.getFeeType());
+
+        return savedPayment;
     }
 
     @Override

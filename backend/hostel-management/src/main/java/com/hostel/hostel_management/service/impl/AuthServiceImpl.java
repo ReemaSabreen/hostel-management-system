@@ -54,8 +54,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-    
-
     @Override
     public void resetPassword(String email, String newPassword) {
         User user = userRepository.findByEmail(email)

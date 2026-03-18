@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.hostel.hostel_management.entity.Fee;
 import com.hostel.hostel_management.entity.enums.FeeStatus;
 import com.hostel.hostel_management.repository.FeeRepository;
+
 import com.hostel.hostel_management.service.FeeService;
+import com.hostel.hostel_management.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 @Service
@@ -17,7 +19,8 @@ import lombok.RequiredArgsConstructor;
 public class FeeServiceImpl implements FeeService{
 
     private final FeeRepository feeRepository;
-
+    private final NotificationService notificationService;
+    
 
     @Override
     public Fee createFee(Fee fee) {
@@ -26,7 +29,11 @@ public class FeeServiceImpl implements FeeService{
             fee.setDueDate(LocalDate.now().plusDays(30));
         }
         fee.setStatus(FeeStatus.PENDING);
-        return feeRepository.save(fee);
+        Fee savedFee = feeRepository.save(fee);
+        
+        notificationService.createNotification(fee.getStudent(), "New Fee added : ₹"+fee.getAmount());
+
+        return savedFee;
     }
 
     @Override

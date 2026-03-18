@@ -1,12 +1,14 @@
 import {useState} from "react";
 import Layout from "../components/Layout";
+
 import {
 createFee,
 updateFee,
 getFeeById,
 getDefaulters,
 getAllFees,
-getStudentFees
+getStudentFees,
+
 } from "../services/feeService";
 
 function Fees(){
@@ -120,6 +122,7 @@ setDefaulters(res.data);
 }catch(e){}
 
 };
+
 
 return(
 

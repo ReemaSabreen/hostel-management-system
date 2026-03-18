@@ -27,3 +27,6 @@ export const getStudentPayments = (studentId) =>
 
 export const getReceipt = (paymentId) =>
   API.get(`/fees/payments/receipt/${paymentId}`);
+
+export const createOrder = (feeId) =>
+  API.post(`/payments/create-order?feeId=${feeId}`);

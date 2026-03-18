@@ -8,7 +8,7 @@ import com.hostel.hostel_management.entity.RoomAllocation;
 public interface RoomService {
     Room createRoom(Room room);
     List<Room> getAvailableRooms();
-    RoomAllocation allocateRoom(Long studentId, Long RoomId);
+    RoomAllocation allocateRoom(Long studentId, String roomNumber);
     void deallocateRoom(Long allocationId);
     List<Room> getAllRooms();
     Room getRoomById(Long roomId);

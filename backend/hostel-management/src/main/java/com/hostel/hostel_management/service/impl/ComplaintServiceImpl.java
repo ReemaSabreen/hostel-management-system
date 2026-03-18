@@ -10,6 +10,7 @@ import com.hostel.hostel_management.entity.Complaint;
 import com.hostel.hostel_management.entity.enums.ComplaintStatus;
 import com.hostel.hostel_management.repository.ComplaintRepository;
 import com.hostel.hostel_management.service.ComplaintService;
+import com.hostel.hostel_management.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 @Service
@@ -17,11 +18,14 @@ import lombok.RequiredArgsConstructor;
 public class ComplaintServiceImpl implements ComplaintService{
 
     private final ComplaintRepository complaintRepository;
+    private final NotificationService notificationService;
 
     @Override
     public Complaint raiseComplaint(Complaint complaint) {
         complaint.setStatus(ComplaintStatus.OPEN);
         complaint.setCreatedAt(LocalDateTime.now());
+        String ticket = "CMP-"+System.currentTimeMillis();
+        complaint.setTicketNo(ticket);
         return complaintRepository.save(complaint);
         
     }
@@ -39,7 +43,10 @@ public class ComplaintServiceImpl implements ComplaintService{
         if(status == ComplaintStatus.RESOLVED){
             complaint.setResolvedAt(LocalDateTime.now());
         }
-        return complaintRepository.save(complaint);
+        Complaint savedComplaint = complaintRepository.save(complaint);
+        
+        notificationService.createNotification(complaint.getStudent(), "Complaint status updated : "+complaint.getTicketNo()+" is "+complaint.getStatus());
+        return savedComplaint;
 
     }
 

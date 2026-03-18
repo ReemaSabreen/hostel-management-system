@@ -28,33 +28,60 @@ if(!student) return <Layout>Loading...</Layout>;
 return(
 
 <Layout>
-    <div className="page-container">
+   <div className="profile-card">
 
-<h2>My Profile</h2>
+  <div className="profile-header">
+    <div className="profile-avatar">
+      {student.firstName[0]}
+    </div>
 
-<div className="form-card">
-<p><b>Student ID:</b> {student.studentId}</p>
-<p><b>Name:</b> {student.firstName} {student.lastName}</p>
+    <div>
+      <h3>{student.firstName} {student.lastName}</h3>
+      <p className="profile-sub">{student.course} - Year {student.year}</p>
+    </div>
+  </div>
 
-<p><b>Enrollment:</b> {student.enrollmentNo}</p>
+  <div className="profile-grid">
 
-<p><b>Date of Birth:</b> {student.dateOfBirth}</p>
+    <div className="profile-item">
+      <label>Student ID</label>
+      <span>{student.studentId}</span>
+    </div>
 
-<p><b>Gender:</b> {student.gender}</p>
+    <div className="profile-item">
+      <label>Enrollment</label>
+      <span>{student.enrollmentNo}</span>
+    </div>
 
-<p><b>Course:</b> {student.course}</p>
+    <div className="profile-item">
+      <label>Date of Birth</label>
+      <span>{student.dateOfBirth}</span>
+    </div>
 
-<p><b>Year:</b> {student.year}</p>
+    <div className="profile-item">
+      <label>Gender</label>
+      <span>{student.gender}</span>
+    </div>
 
-<p><b>Phone:</b> {student.phone}</p>
+    <div className="profile-item">
+      <label>Phone</label>
+      <span>{student.phone}</span>
+    </div>
 
-<p><b>Emergency Contact:</b> {student.emergencyContact}</p>
 
-<p><b>Address:</b> {student.address}</p>
+    <div className="profile-item">
+      <label>Emergency Contact</label>
+      <span>{student.emergencyContact}</span>
+    </div>
+
+    <div className="profile-item full-width">
+      <label>Address</label>
+      <span>{student.address}</span>
+    </div>
+
+  </div>
 
 </div>
-</div>
-
 </Layout>
 
 );

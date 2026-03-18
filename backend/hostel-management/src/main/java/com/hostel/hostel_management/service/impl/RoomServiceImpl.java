@@ -13,8 +13,10 @@ import com.hostel.hostel_management.entity.enums.RoomStatus;
 import com.hostel.hostel_management.repository.RoomAllocationRepository;
 import com.hostel.hostel_management.repository.RoomRepository;
 import com.hostel.hostel_management.repository.StudentRepository;
+import com.hostel.hostel_management.service.NotificationService;
 import com.hostel.hostel_management.service.RoomService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final StudentRepository studentRepository;
     private final RoomAllocationRepository allocationRepository;
+    private final NotificationService notificationService;
    
     @Override
     public Room createRoom(Room room) {
@@ -84,10 +87,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomAllocation allocateRoom(Long studentId, Long roomId) {
+    @Transactional
+    public RoomAllocation allocateRoom(Long studentId, String roomNumber) {
         Student student = studentRepository.findById(studentId)
         .orElseThrow(() -> new RuntimeException("Student not found"));
-        Room room = roomRepository.findById(roomId)
+        Room room = roomRepository.findByRoomNumber(roomNumber)
         .orElseThrow(() -> new RuntimeException("Room not found"));
 
         if(room.getCurrentOccupancy() >= room.getCapacity()){
@@ -111,7 +115,6 @@ public class RoomServiceImpl implements RoomService {
         allocation.setCreatedAt(LocalDate.now());
         allocationRepository.save(allocation);
 
-        
         room.setCurrentOccupancy(room.getCurrentOccupancy() + 1);
         if(room.getCurrentOccupancy() == room.getCapacity()){
             room.setStatus(RoomStatus.OCCUPIED);
@@ -120,28 +123,32 @@ public class RoomServiceImpl implements RoomService {
             room.setStatus(RoomStatus.AVAILABLE);
         }
         roomRepository.save(room);
+        notificationService.createNotification(student,"New Room allocated :"+room.getRoomNumber());
         return allocation;
     }
 
     @Override
+    @Transactional
     public void deallocateRoom(Long allocationId) {
         RoomAllocation allocation = allocationRepository.findById(allocationId)
-        .orElseThrow(() -> new RuntimeException("Allacation not found"));
+        .orElseThrow(() -> new RuntimeException("Allocation not found"));
 
         if(allocation.getStatus() == AllocationStatus.COMPLETED){
         throw new RuntimeException("Room already vacated");
     }
-
-        Room room = allocation.getRoom();
-        
         allocation.setStatus(AllocationStatus.COMPLETED);
         allocation.setDeallocationDate(LocalDate.now());
         allocationRepository.save(allocation);
+
+        Room room = allocation.getRoom();
+        
         room.setCurrentOccupancy(room.getCurrentOccupancy() - 1);
         if(room.getCurrentOccupancy() < room.getCapacity()){
         room.setStatus(RoomStatus.AVAILABLE);
     }
         roomRepository.save(room);
+       
+        notificationService.createNotification(allocation.getStudent(),"Room "+room.getRoomNumber()+" deallocated");
     }
 
     @Override

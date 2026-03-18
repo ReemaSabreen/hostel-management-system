@@ -19,6 +19,8 @@ return(
 Hostel Management
 </div>
 
+<div ></div>
+
 <button className="action-btn delete-btn" onClick={logout}>
 Logout
 </button>

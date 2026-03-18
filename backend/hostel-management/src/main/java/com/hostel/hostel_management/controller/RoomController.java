@@ -59,11 +59,11 @@ public class RoomController {
     }
 
     @PostMapping("/allocate")
-    public ResponseEntity<RoomAllocation> allocateRoom(@RequestParam Long studentId, @RequestParam Long roomId){
-        return ResponseEntity.ok(roomService.allocateRoom(studentId, roomId));
+    public ResponseEntity<RoomAllocation> allocateRoom(@RequestParam Long studentId, @RequestParam String roomNumber){
+        return ResponseEntity.ok(roomService.allocateRoom(studentId, roomNumber));
     }
 
-    @DeleteMapping("/deallocate/{allocationId}")
+    @PutMapping("/deallocate/{allocationId}")
     public ResponseEntity<String> deallocateRoom(@PathVariable Long allocationId){
         roomService.deallocateRoom(allocationId);
         return ResponseEntity.ok("room deallocated");

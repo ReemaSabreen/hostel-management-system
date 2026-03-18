@@ -5,7 +5,8 @@ import {
 getStudentFees,
 makePayment,
 getStudentPayments,
-getReceipt
+getReceipt,
+createOrder
 } from "../services/feeService";
 
 function MyFees(){
@@ -62,6 +63,50 @@ setReceipt(res.data);
 
 };
 
+const handlePayment = async (feeId, amount) => {
+  try {
+
+    // 1. Create order
+    const res = await createOrder(feeId);
+    const order = typeof res.data === "string"
+      ? JSON.parse(res.data)
+      : res.data;
+    console.log("Order response:", order);
+
+    // 2. Open Razorpay
+    const options = {
+      key: process.env.REACT_APP_RAZORPAY_KEY,
+      amount: order.amount,
+      currency: "INR",
+      name: "Hostel Management",
+      description: "Fee Payment",
+      order_id: order.id,
+
+      handler: async function () {
+
+        // 3. AFTER SUCCESS  call  existing API
+        await makePayment(feeId, {
+          amount: amount,
+          paymentMethod: "ONLINE",
+          transactionId: order.id
+        });
+
+        alert("Payment Successful ");
+
+        loadFees();
+        loadPayments();
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+
+  } catch (e) {
+    console.error(e);
+    alert("Payment Failed");
+  }
+};
+
 return(
 
 <Layout>
@@ -94,9 +139,9 @@ return(
 <td>{f.amount}</td>
 <td>{f.status}</td>
 
-<td>
 
-<input className="input-field"
+
+{/* <input className="input-field"
 placeholder="Amount"
 onChange={(e)=>setPayment({...payment,amount:e.target.value})}
 />
@@ -114,13 +159,26 @@ onChange={(e)=>setPayment({...payment,paymentMethod:e.target.value})}
 <input className="input-field"
 placeholder="Transaction ID"
 onChange={(e)=>setPayment({...payment,transactionId:e.target.value})}
-/>
+/> */}
 
-<button className="actio-btn checkout-btn" onClick={()=>handlePay(f.feeId)}>
+{/* <button className="actio-btn checkout-btn" onClick={()=>handlePay(f.feeId)}>
 Pay
-</button>
+</button> */}
 
+<td>
+  {f.status === "PAID" ? (
+    <span style={{color:"green", fontWeight:"bold"}}>PAID</span>
+  ) : (
+    <button
+      className="action-btn checkout-btn"
+      onClick={() => handlePayment(f.feeId, f.amount)}
+    >
+      Pay Now
+    </button>
+  )}
 </td>
+
+
 
 </tr>
 

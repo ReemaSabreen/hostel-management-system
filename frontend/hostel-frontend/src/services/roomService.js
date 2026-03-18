@@ -18,11 +18,11 @@ export const deleteRoom = (roomId) =>
 export const getAvailableRooms = () =>
   API.get("/rooms/available");
 
-export const allocateRoom = (studentId,roomId) =>
-  API.post(`/rooms/allocate?studentId=${studentId}&roomId=${roomId}`);
+export const allocateRoom = (studentId, roomNumber) =>
+  API.post(`/rooms/allocate?studentId=${studentId}&roomNumber=${roomNumber}`);
 
 export const deallocateRoom = (allocationId) =>
-  API.delete(`/rooms/deallocate/${allocationId}`);
+  API.put(`/rooms/deallocate/${allocationId}`);
 
 export const getAllAllocations = () => {
   return API.get("/rooms/allocations");
